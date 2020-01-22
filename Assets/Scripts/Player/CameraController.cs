@@ -14,6 +14,8 @@ public class CameraController : MonoBehaviour
 
     public Transform CannonHolder;
 
+    public LayerMask layermask;
+
     //Variables/Stats
     [Header("Stats")]
     public float RotationSpeed = 10;
@@ -31,7 +33,7 @@ public class CameraController : MonoBehaviour
         //Finds the objects it needs
         Target = GameManager.GM.Player.transform;
         Holder = transform.Find("CameraHolder").gameObject;
-        CannonHolder = transform.GetChild(0).Find("CannonHolder");
+        CannonHolder = Target.GetChild(0).Find("CannonHolder");
         SetUpCamera();
         TF = GetComponent<Transform>();
         MainCam = GameManager.GM.MainCamera;
@@ -75,16 +77,14 @@ public class CameraController : MonoBehaviour
         Holder.transform.localPosition = newPos;
         MainCam.transform.localPosition = Vector3.zero;
         MainCam.transform.LookAt(new Vector3(TF.position.x, TF.position.y + CameraHeight / 2, TF.position.z) - (TF.right * SideDistance / 3), Vector3.up);
-        
+
         //Aesthetics 
+        CannonHolder.transform.LookAt(MainCam.transform.position + (MainCam.transform.forward * 100), Vector3.up);
         RaycastHit hit;
-        if (Physics.Raycast(MainCam.transform.position, MainCam.transform.forward, out hit, 100)) {
-            if (hit.collider != null)
-            {
+        if (Physics.Raycast(MainCam.transform.position, MainCam.transform.forward, out hit, 100, layermask)) {
+            if(hit.collider != null) {
                 CannonHolder.transform.LookAt(hit.point, Vector3.up);
-
             }
-
         }
     }
 }
