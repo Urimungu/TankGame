@@ -7,16 +7,22 @@ using UnityEngine.UI;
 public class CameraController : MonoBehaviour
 {
     //References
+    private Transform TF;
     private Transform Target;
     private GameObject Holder;
+    private GameObject MainCam;
+
     public Transform CannonHolder;
 
     //Variables/Stats
     [Header("Stats")]
     public float RotationSpeed = 10;
+    public float VerticalSpeed = 10;
     public float CameraDistance = 3;
     public float CameraHeight = 4;
+    public float HeightLength = 2;
     public float SideDistance = 1;
+    public float theta = 0;
     public bool CanMove = true;
 
 
@@ -27,6 +33,8 @@ public class CameraController : MonoBehaviour
         Holder = transform.Find("CameraHolder").gameObject;
         CannonHolder = transform.GetChild(0).Find("CannonHolder");
         SetUpCamera();
+        TF = GetComponent<Transform>();
+        MainCam = GameManager.GM.MainCamera;
     }
 
     private void SetUpCamera()
@@ -51,12 +59,32 @@ public class CameraController : MonoBehaviour
     private void Movement(float hor, float ver)
     {
         //Follows the player and adds a side distance
-        transform.position = Target.position + (Target.transform.right * SideDistance);
+        TF.position = Target.position + (Target.transform.right * SideDistance);
 
         //Rotate around the tank in the X direction (Left/Right)
         Target.Rotate(Target.transform.up * hor * RotationSpeed);
-        transform.rotation = Target.rotation;
+        TF.rotation = Target.rotation;
 
         //Rotates the Camera in the Y direction (Up/Down)
+        Vector3 newPos = new Vector3();
+        theta = Mathf.Clamp(theta + (VerticalSpeed / 10) * -ver, -2.5f, -0.5f);
+        newPos.z = CameraDistance * Mathf.Sin(theta);
+        newPos.y = CameraDistance * Mathf.Cos(theta) + CameraHeight;
+
+        //Applies the new transforms and makes sure they work
+        Holder.transform.localPosition = newPos;
+        MainCam.transform.localPosition = Vector3.zero;
+        MainCam.transform.LookAt(new Vector3(TF.position.x, TF.position.y + CameraHeight / 2, TF.position.z) - (TF.right * SideDistance / 3), Vector3.up);
+        
+        //Aesthetics 
+        RaycastHit hit;
+        if (Physics.Raycast(MainCam.transform.position, MainCam.transform.forward, out hit, 100)) {
+            if (hit.collider != null)
+            {
+                CannonHolder.transform.LookAt(hit.point, Vector3.up);
+
+            }
+
+        }
     }
 }

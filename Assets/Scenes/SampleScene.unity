@@ -307,11 +307,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8947c28d4da69814ba2ba24cf040042e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CannonHolder: {fileID: 0}
+  CannonHolder: {fileID: 151600225}
   RotationSpeed: 10
-  CameraDistance: 1.5
+  VerticalSpeed: 0.3
+  CameraDistance: 1
   CameraHeight: 0.7
+  HeightLength: 2
   SideDistance: 0.7
+  theta: -2
   CanMove: 1
 --- !u!4 &352749025
 Transform:
@@ -1130,6 +1133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  MainCamera: {fileID: 0}
 --- !u!4 &1771669912
 Transform:
   m_ObjectHideFlags: 0

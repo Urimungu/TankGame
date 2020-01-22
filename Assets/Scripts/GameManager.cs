@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     //References
     [Header("References")]
     public GameObject Player;
+    public GameObject MainCamera;
 
     //Variables
     private bool MouseLocked;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         Player = GameObject.FindGameObjectWithTag("Player");
         MouseLocked = true;
         Cursor.lockState = CursorLockMode.Locked;
+        MainCamera = Camera.main.gameObject;
     }
 
     private void Update() {
