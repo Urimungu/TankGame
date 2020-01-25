@@ -4,46 +4,48 @@ using UnityEngine;
 
 public class ShootManager : MonoBehaviour
 {
-    public GameObject shot;
-    public GameObject ShotHolder;
-
+ 
     private GameObject Cannon;
     private GameObject CannonHolder;
 
-    public float reloadRate;
+    private TankData TS;
+
     private float timer;
 
     void Start()
     {
+        //Initializes the variables
+        TS = GameManager.GM.transform.GetComponent<TankData>();
         CannonHolder = GameManager.GM.Player.transform.GetChild(0).Find("CannonHolder").gameObject;
         Cannon = CannonHolder.transform.Find("ShotSpawner").gameObject;
-
-
     }
 
     private void Update()
     {
+        //Checks if butten is pressed and it can in the fire rate.
         if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time > timer)
         {
-            timer = Time.time + reloadRate;
+            timer = Time.time + TS.reloadRate;
             Shoot();
         }
 
     }
 
+    //Fires a bullet
     private void Shoot()
     {
-        GameObject bullet = Instantiate(shot, Cannon.transform.position, CannonHolder.transform.rotation,
-            ShotHolder.transform);
-        bullet.GetComponent<Bullet>().Enter(3, 40);
+        GameObject bullet = Instantiate(TS.shot, Cannon.transform.position, CannonHolder.transform.rotation,
+            TS.ShotHolder.transform);
+        //Changes the bullet states and plays teh animations
+        bullet.GetComponent<Bullet>().Enter(TS.bulletLifeTime, TS.bulletSpeed, TS.bulletDamage, GameManager.GM.Player);
         Cannon.GetComponent<ParticleSystem>().Play();
         StartCoroutine(lightThing());
     }
 
-    IEnumerator lightThing()
-    {
+    //Lights up for a split second to show that it fired
+    IEnumerator lightThing(){
         Cannon.GetComponent<Light>().intensity = 15;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.05f);
         Cannon.GetComponent<Light>().intensity = 0;
     }
 

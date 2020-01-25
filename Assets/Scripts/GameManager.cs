@@ -13,7 +13,10 @@ public class GameManager : MonoBehaviour
     public GameObject MainCamera;
 
     //Variables
-    private bool MouseLocked;
+    private bool MouseLocked = true;
+    public float PlayerPoints = 0;
+
+    public List<GameObject> EnemyTanks = new List<GameObject>();
     private void Awake()
     {
         //Creates a singleton for the Game Manager
@@ -24,9 +27,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //References the player/Tank
-        Player = GameObject.FindGameObjectWithTag("Player");
-        MouseLocked = true;
+        //Locks the Mouse position
         Cursor.lockState = CursorLockMode.Locked;
         MainCamera = Camera.main.gameObject;
     }
