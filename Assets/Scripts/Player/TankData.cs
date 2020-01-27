@@ -10,8 +10,6 @@ public class TankData : MonoBehaviour
     public float MaxSpeed = 15;
     public float ReverseMax = 10;
     public float StopSpeed = 10;
-    public float turnSpeed = 10;
-    public float TankHealth = 100;
     public bool TankCanMove = true;
 
     //Bullet
@@ -32,7 +30,6 @@ public class TankData : MonoBehaviour
     public float VerticalSpeed = 10;
     public float CameraDistance = 3;
     public float CameraHeight = 4;
-    public float HeightLength = 2;
     public float SideDistance = 1;
     public float theta = 0;
     public bool CameraCanMove = true;
