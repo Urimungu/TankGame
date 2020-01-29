@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyTank : MonoBehaviour
 {
     //Stats
     public float health = 100;
     public bool canMove = true;
-    public int currentWayPoint = 0;
+    private int curWayPoint;
 
     //References
     public GameObject explosion;
     public GameObject Cannon;
     public Transform[] WayPoints;
+    public Transform currentWaypoint;
+
     private Rigidbody rb;
     private Transform TF;
+    private NavMeshAgent Nav;
 
 
     public enum State { Patrol, Chase, Flee}
@@ -26,6 +30,9 @@ public class EnemyTank : MonoBehaviour
         state = State.Patrol;
         TF = transform;
         rb = GetComponent<Rigidbody>();
+        Nav = GetComponent<NavMeshAgent>();
+        currentWaypoint = WayPoints[0];
+        Nav.SetDestination(currentWaypoint.position);
     }
 
     private void Update() {
@@ -48,13 +55,22 @@ public class EnemyTank : MonoBehaviour
 
     private void Patrol() {
         if(WayPoints.Length > 0)
-            Cannon.transform.LookAt(WayPoints[currentWayPoint].position, Vector3.up);
+            Cannon.transform.LookAt(WayPoints[curWayPoint].position, Vector3.up);
 
-    }
+        if (Mathf.Abs((transform.position - currentWaypoint.position).magnitude) < 0.5f){
+            int randomNumber = Random.Range(0, WayPoints.Length - 1);
+            if (curWayPoint == randomNumber) {
+                if (curWayPoint == WayPoints.Length)
+                    randomNumber--;
+                else
+                    randomNumber++;
+            }
 
-    private void MoveTowards(Vector3 location) {
+            curWayPoint = randomNumber;
 
-
+            currentWaypoint = WayPoints[curWayPoint];
+            Nav.SetDestination(currentWaypoint.position);
+        }
     }
 
     //Gets run by the bullet if it comes in contact and detects that it has health
