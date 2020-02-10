@@ -15,8 +15,8 @@ public class ShootManager : MonoBehaviour
     void Start()
     {
         //Initializes the variables
-        TS = GameManager.GM.transform.GetComponent<TankData>();
-        CannonHolder = GameManager.GM.Player.transform.GetChild(0).Find("CannonHolder").gameObject;
+        TS = GameManager.Manager.transform.GetComponent<TankData>();
+        CannonHolder = GameManager.Manager.Player.transform.GetChild(0).Find("CannonHolder").gameObject;
         Cannon = CannonHolder.transform.Find("ShotSpawner").gameObject;
     }
 
@@ -37,7 +37,7 @@ public class ShootManager : MonoBehaviour
         GameObject bullet = Instantiate(TS.shot, Cannon.transform.position, CannonHolder.transform.rotation,
             TS.ShotHolder.transform);
         //Changes the bullet states and plays teh animations
-        bullet.GetComponent<Bullet>().Enter(TS.bulletLifeTime, TS.bulletSpeed, TS.bulletDamage, GameManager.GM.Player);
+        bullet.GetComponent<Bullet>().Enter(TS.bulletLifeTime, TS.bulletSpeed, TS.bulletDamage, GameManager.Manager.Player);
         Cannon.GetComponent<ParticleSystem>().Play();
         StartCoroutine(lightThing());
     }

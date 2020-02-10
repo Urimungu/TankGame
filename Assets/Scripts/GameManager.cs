@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     //Singleton
-    public static GameManager GM;
+    public static GameManager Manager;
 
     //References
     [Header("References")]
@@ -20,8 +20,8 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         //Creates a singleton for the Game Manager
-        if (GM == null) {
-            GM = this;
+        if (Manager == null) {
+            Manager = this;
             DontDestroyOnLoad(gameObject);
         }else {
             Destroy(gameObject);

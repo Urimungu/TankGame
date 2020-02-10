@@ -20,13 +20,13 @@ public class CameraController : MonoBehaviour
     private void Start()
     {
         //Finds the objects it needs
-        Target = GameManager.GM.Player.transform;
-        TD = GameManager.GM.transform.GetComponent<TankData>();
+        Target = GameManager.Manager.Player.transform;
+        TD = GameManager.Manager.transform.GetComponent<TankData>();
         Holder = transform.Find("CameraHolder").gameObject;
         CannonHolder = Target.GetChild(0).Find("CannonHolder");
         SetUpCamera();
         TF = GetComponent<Transform>();
-        MainCam = GameManager.GM.MainCamera;
+        MainCam = GameManager.Manager.MainCamera;
     }
 
     private void SetUpCamera()

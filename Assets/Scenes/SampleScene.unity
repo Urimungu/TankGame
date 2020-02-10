@@ -111,7 +111,7 @@ NavMeshSettings:
     accuratePlacement: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 3afd8a93cf711fc40b1e8f9b188b9a97, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &5109643
 GameObject:
   m_ObjectHideFlags: 0
@@ -11964,7 +11964,6 @@ GameObject:
   - component: {fileID: 1536212521}
   - component: {fileID: 1536212524}
   - component: {fileID: 1536212525}
-  - component: {fileID: 1536212526}
   m_Layer: 9
   m_Name: EnemyTank
   m_TagString: Enemy
@@ -12029,9 +12028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d79919ef5839b845ae7a5e47d6d069d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  canMove: 1
-  explosion: {fileID: 100000, guid: 15ca5b8fa431dc04291a79cadcd19874, type: 3}
+  Explosion: {fileID: 0}
   Cannon: {fileID: 698247348}
   WayPoints:
   - {fileID: 179203637}
@@ -12039,7 +12036,6 @@ MonoBehaviour:
   - {fileID: 756577351}
   - {fileID: 902339136}
   - {fileID: 1416259290}
-  currentWaypoint: {fileID: 0}
 --- !u!114 &1536212525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12052,39 +12048,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0c6e7e34e7dbd4e91cb1af85ad4245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TankAcc: 10
-  MaxSpeed: 15
-  ReverseMax: 10
+  TankSpeed: 5
+  MaxSpeed: 10
+  ReverseSpeed: 3
   StopSpeed: 10
   TankCanMove: 1
-  shot: {fileID: 9041021756159181135, guid: 0411bf5d903713b42a64dbbd8ac1766f, type: 3}
+  Health: 100
+  Shot: {fileID: 0}
   ShotHolder: {fileID: 1966922341}
-  bulletLifeTime: 4
-  bulletSpeed: 40
-  bulletDamage: 30
-  reloadRate: 0
---- !u!195 &1536212526
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1536212520}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 1
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  BulletLifeTime: 4
+  BulletSpeed: 40
+  BulletDamage: 30
+  ReloadRate: 0
 --- !u!1 &1692441929
 GameObject:
   m_ObjectHideFlags: 0

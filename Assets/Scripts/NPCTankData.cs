@@ -6,20 +6,23 @@ public class NPCTankData : MonoBehaviour
 {
     //Tanks
     [Header("Tank Stats")]
-    public float TankAcc = 10;
+    //Movement
+    public float TankSpeed = 10;
     public float MaxSpeed = 15;
-    public float ReverseMax = 10;
+    public float ReverseSpeed = 10;
     public float StopSpeed = 10;
     public bool TankCanMove = true;
+    //Stats
+    public float Health = 100;
 
     //Bullet
     [Header("Shooting")]
-    public GameObject shot;
+    public GameObject Shot;
     public GameObject ShotHolder;
 
-    public float bulletLifeTime = 4;
-    public float bulletSpeed = 40;
-    public float bulletDamage = 30;
-
-    public float reloadRate;
+    //Bullet Stats
+    public float BulletLifeTime = 4;
+    public float BulletSpeed = 40;
+    public float BulletDamage = 30;
+    public float ReloadRate = 0.4f;
 }

@@ -8,9 +8,9 @@ public class PlayerController : MonoBehaviour{
 
     //Initializes variables
     private void Awake(){
-        GameManager.GM.Player = gameObject;
+        GameManager.Manager.Player = gameObject;
         rb = GetComponent<Rigidbody>();
-        ThisTrans = GameManager.GM.transform.GetComponent<TankData>();
+        ThisTrans = GameManager.Manager.transform.GetComponent<TankData>();
     }
 
     private void Update()
