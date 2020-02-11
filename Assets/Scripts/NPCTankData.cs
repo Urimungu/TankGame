@@ -12,6 +12,13 @@ public class NPCTankData : MonoBehaviour
     public float ReverseSpeed = 10;
     public float StopSpeed = 10;
     public bool TankCanMove = true;
+
+    //Obstacle Avoidance
+    public float SeeDistance = 5;
+    public float AvoidDistance = 5;
+    public float OpeningDistance = 5;
+    public LayerMask AvoidMask;
+
     //Stats
     public float Health = 100;
 

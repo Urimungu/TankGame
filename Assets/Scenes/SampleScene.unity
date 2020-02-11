@@ -12053,6 +12053,12 @@ MonoBehaviour:
   ReverseSpeed: 3
   StopSpeed: 10
   TankCanMove: 1
+  SeeDistance: 5
+  AvoidDistance: 5
+  OpeningDistance: 5
+  AvoidMask:
+    serializedVersion: 2
+    m_Bits: 279
   Health: 100
   Shot: {fileID: 0}
   ShotHolder: {fileID: 1966922341}

@@ -15,6 +15,8 @@ public class EnemyTank : MonoBehaviour
     private Transform _player;
     private NPCTankData _data;
 
+    //Obstacle Avoidance
+    private Vector3 _newTargetPosition;
 
     public enum State { Patrol, Chase, Flee}
     private State _state;
@@ -36,7 +38,6 @@ public class EnemyTank : MonoBehaviour
         //Start running if the Tank is able to move
         if(_data.TankCanMove)
             StateMachine();
-
     }
 
     //Controls the Enemy depending on what Stat he is in
@@ -69,9 +70,47 @@ public class EnemyTank : MonoBehaviour
     //Moves the Tank from point A to point B
     private void Movement() {
         //Moves towards target
-        var newDirection = (WayPoints[_currentWayPoint].position - _transform.position).normalized * _data.TankSpeed;
+        var newDirection = NewDirection() * _data.TankSpeed;
         _rigidBody.velocity = new Vector3(newDirection.x, _rigidBody.velocity.y, newDirection.z);
+        _transform.rotation = Quaternion.LookRotation(newDirection, Vector3.up);
 
+    }
+
+    private Vector3 NewDirection()
+    {
+        //If the Tank has reached its temporary Target Position
+        if ((_transform.position - _newTargetPosition).magnitude < 0.5f)
+            _newTargetPosition = Vector3.zero;
+
+        //If the Tank hasn't reached his Obstacle Avoidance Position yet, then keep going until he does
+        if (_newTargetPosition != Vector3.zero)
+            return (_newTargetPosition - _transform.position).normalized;
+
+        //If there is something in front of the Tank then Change Course
+        RaycastHit hit;
+        if (Physics.Raycast(_transform.position, _transform.forward, out hit, _data.AvoidDistance, _data.AvoidMask)) {
+            if (hit.collider != null)
+                RightOrLeft(hit.collider);
+        }
+
+        //Returns Regular Forward if nothing is in the way
+        return (WayPoints[_currentWayPoint].position - _transform.position).normalized;
+    }
+
+    //False is Left, True is Right
+    private void RightOrLeft(Collider hit) {
+
+        RaycastHit currentHit;
+        Vector3 center = _transform.position + _transform.GetComponent<CapsuleCollider>().center;
+
+        float angle = 0;
+        for (int i = 0; i < 20; i++) {
+            Physics.Raycast(center, (_transform.forward + _transform.right * angle).normalized, out currentHit, 30, _data.AvoidMask);
+            if(currentHit.collider != hit)
+                return;
+
+            angle += 0.25f;
+        }
     }
 
     //Gets run by the bullet if it comes in contact and detects that it has health
