@@ -79,18 +79,42 @@ public class EnemyTank : MonoBehaviour
     private Vector3 NewDirection()
     {
         //If the Tank has reached its temporary Target Position
-        if ((_transform.position - _newTargetPosition).magnitude < 0.5f)
+        if ((_transform.position - new Vector3(_newTargetPosition.x, _transform.position.y, _newTargetPosition.z)).magnitude < 0.5f)
             _newTargetPosition = Vector3.zero;
 
         //If the Tank hasn't reached his Obstacle Avoidance Position yet, then keep going until he does
         if (_newTargetPosition != Vector3.zero)
             return (_newTargetPosition - _transform.position).normalized;
+        
 
         //If there is something in front of the Tank then Change Course
-        RaycastHit hit;
-        if (Physics.Raycast(_transform.position, _transform.forward, out hit, _data.AvoidDistance, _data.AvoidMask)) {
-            if (hit.collider != null)
-                RightOrLeft(hit.collider);
+        if (Physics.Raycast(_transform.position, _transform.forward, out var hit, _data.AvoidDistance, _data.AvoidMask)) {
+            if (hit.collider != null) {
+                //If there is a wall in front of the Enemy 
+                Vector3 checkRight = RightOrLeft(hit.collider);
+                Vector3 checkLeft = RightOrLeft(hit.collider, false);
+
+                if (checkRight == Vector3.zero && checkLeft == Vector3.zero) {
+                    _currentWayPoint = RandomSelector(WayPoints.Length - 1);
+                    return Vector3.zero;
+                }
+
+                float rightLength = (_transform.position - checkRight).magnitude + (checkRight - WayPoints[_currentWayPoint].position).magnitude;
+                float leftLength =  (_transform.position - checkLeft).magnitude + (checkLeft - WayPoints[_currentWayPoint].position).magnitude; ;
+
+                //Sets the new Target location to the new point
+                if (rightLength < leftLength) {
+                    Vector3 newForward = (checkRight - _transform.position).normalized;
+                    _newTargetPosition = checkRight + (new Vector3(newForward.z, newForward.y, newForward.x) * _data.AvoidDistance) + (newForward * _data.OpeningDistance);
+                }
+                if(rightLength > leftLength){
+                    Vector3 newForward = (checkLeft - _transform.position).normalized;
+                    _newTargetPosition = checkLeft - (new Vector3(newForward.z, newForward.y, newForward.x) * _data.AvoidDistance) + (newForward * _data.OpeningDistance);
+                }
+
+                _newTargetPosition.y = _transform.position.y;
+                return (_newTargetPosition - _transform.position).normalized;
+            }
         }
 
         //Returns Regular Forward if nothing is in the way
@@ -98,19 +122,24 @@ public class EnemyTank : MonoBehaviour
     }
 
     //False is Left, True is Right
-    private void RightOrLeft(Collider hit) {
+    private Vector3 RightOrLeft(Collider hit, bool right = true) {
 
-        RaycastHit currentHit;
+        //Initializes variables
         Vector3 center = _transform.position + _transform.GetComponent<CapsuleCollider>().center;
-
+        Vector3 lastPos = Vector3.zero;
         float angle = 0;
-        for (int i = 0; i < 20; i++) {
-            Physics.Raycast(center, (_transform.forward + _transform.right * angle).normalized, out currentHit, 30, _data.AvoidMask);
-            if(currentHit.collider != hit)
-                return;
 
-            angle += 0.25f;
+        //Runs through each 
+        for (int i = 0; i < 20; i++) {
+            Physics.Raycast(center, (_transform.forward + _transform.right * angle).normalized, out var currentHit, 30, _data.AvoidMask);
+            if (currentHit.collider != hit)
+                return lastPos;
+
+            lastPos = currentHit.point;
+            angle += 0.25f * (right ? 1 : -1);
         }
+
+        return Vector3.zero;
     }
 
     //Gets run by the bullet if it comes in contact and detects that it has health

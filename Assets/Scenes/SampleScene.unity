@@ -12058,7 +12058,7 @@ MonoBehaviour:
   OpeningDistance: 5
   AvoidMask:
     serializedVersion: 2
-    m_Bits: 279
+    m_Bits: 311
   Health: 100
   Shot: {fileID: 0}
   ShotHolder: {fileID: 1966922341}
