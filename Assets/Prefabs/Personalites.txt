@@ -1,0 +1,28 @@
+Blinky:
+-[Base Class Enemy]
+-Patrols
+-Listens for the Player and has regular sight. 
+-Follows the player when is in full health.
+-Shoots when he is close enough to the player
+-Runs away after a certain amount of health is drained.
+
+Pinky:
+-[Noob]
+-Patrols and stops at each location
+-Chases the player slowly.
+-Shoots every once in a while badly.
+-Deosn't know how to back down from a fight.
+
+Stinky:
+-[Cowardly]
+-Patrols
+-Stays away from the player at all costs.
+-Flees on sight
+-Shoots only when being chased. 
+
+GodButcher:
+-[God Tier]
+-Patrols quickly to find the player asap.
+-Listeining and Sight is enhanced.
+-Shoots while in pursuit.
+-Doesn't ever back down from a fight.

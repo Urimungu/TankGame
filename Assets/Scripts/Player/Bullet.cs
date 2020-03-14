@@ -29,8 +29,8 @@ public class Bullet : MonoBehaviour
     //Checks to see if it has hit anything
     void OnCollisionEnter(Collision other){
         //Damages enemy if there is one
-        if(other.gameObject.GetComponent<EnemyTank>() != null)
-            other.gameObject.GetComponent<EnemyTank>().GetHit(Damage, Shooter);
+        if(other.gameObject.GetComponent<Blinky>() != null && Shooter != other.gameObject)
+            other.gameObject.GetComponent<Blinky>().GetHit(Damage, Shooter);
 
         //Regardless of what it hits, it destroys itself and explodes
         SpawnExplode();

@@ -16,6 +16,7 @@ public class TankData : MonoBehaviour
     [Header("Shooting")]
     public GameObject shot;
     public GameObject ShotHolder;
+    public Rigidbody _rigidbody;
 
     public float bulletLifeTime = 4;
     public float bulletSpeed = 40;

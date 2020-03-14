@@ -11,12 +11,21 @@ public class GameManager : MonoBehaviour
     [Header("References")]
     public GameObject Player;
     public GameObject MainCamera;
+    public TankData Tankdata;
 
     //Variables
     private bool MouseLocked = true;
     public float PlayerPoints = 0;
 
     public List<GameObject> EnemyTanks = new List<GameObject>();
+
+    //Enemy Tank Data
+    public enum Personality { Blinky, Pinky, Stinky, GodButcher }
+    public NPCTankData Blinky;
+    public NPCTankData Pinky;
+    public NPCTankData Stinky;
+    public NPCTankData GodButcher;
+
     private void Awake()
     {
         //Creates a singleton for the Game Manager
@@ -30,6 +39,7 @@ public class GameManager : MonoBehaviour
         //Locks the Mouse position
         Cursor.lockState = CursorLockMode.Locked;
         MainCamera = Camera.main.gameObject;
+        Tankdata = GetComponent<TankData>();
     }
 
     private void Update() {
