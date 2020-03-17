@@ -71,8 +71,8 @@ public class Blinky : MonoBehaviour {
         aimpos.y += (GameManager.Manager.Player.transform.position - _transform.position).magnitude * Mathf.Pow(0.2f, 2);
         Cannon.LookAt(aimpos, Vector3.up);
         //Shoot
-        if(Time.time > _timer) {
-            _timer = Time.time + _data.ReloadRate;
+        if(Time.time > _timerSecondary) {
+            _timerSecondary = Time.time + _data.ReloadRate;
             GetComponent<ShootManager>().Shoot(_data, ShootLocation, Cannon.gameObject, gameObject);
         }
 
@@ -96,7 +96,6 @@ public class Blinky : MonoBehaviour {
 
         //Gets to close and starts combat
         if(_data.FightRange > (GameManager.Manager.Player.transform.position - _transform.position).magnitude) {
-            _timer = Time.time;
             _state = State.Combat;
             _rigidBody.velocity = Vector3.zero;
         }
