@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class NPCTankData
+public class NPCTankData : MonoBehaviour
 {
     //Tanks
     [Header("Tank Stats")]

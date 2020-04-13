@@ -4,22 +4,45 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public GameObject Level;
+    public List<GameObject> RoomTypes = new List<GameObject>();
 
     [Header("Dimensions")]
-    public float Collumbs;
-    public float Rows;
+    [SerializeField] private float Collumbs;
+    [SerializeField] private float Rows;
+    [SerializeField] private bool RoomOfTheDay;
+    [SerializeField] private int CustomSeed;
 
-    private void Awake() {
-        GenerateMap();
+    private int GenerateSeed() {
+        //Returns Custom Seed
+        if(CustomSeed != 0)
+            return CustomSeed;
+
+        //Returns Level of the day
+        if(RoomOfTheDay) {
+            System.DateTime today = System.DateTime.Today;
+            int seed = today.Month + today.Day + today.Year;
+            return seed;
+        }
+        
+        //Returns a random seed
+        return Random.Range(0, 100000);
     }
-    private void GenerateMap() {
+
+    public void GenerateMap() {
+
+        //Seed
+        int seed = GenerateSeed();
+        Random.InitState(seed);
 
         //Creates the Level
         for(int x = 0; x < Collumbs; x++) {
             for(int y = 0; y < Rows; y++) {
-                GameObject room = Instantiate(Level, Vector3.zero, Quaternion.identity, transform);
+                GameObject room = Instantiate(RoomTypes[Random.Range(0, RoomTypes.Count)], Vector3.zero, Quaternion.identity, transform);
                 room.name = "Room: " + ((x * Rows) + y + 1);
+
+                //Adds the spawn points to the game manager
+                GameManager.Manager.TankSpawnPoints.Add(room.transform.Find("TankSpawn").gameObject);
+                GameManager.Manager.PickUpSpawnPoints.Add(room.transform.Find("PickUpSpawn").gameObject);
 
                 //Positions them in a grid like pattern
                 float roomWidth = room.transform.localScale.x * 10;

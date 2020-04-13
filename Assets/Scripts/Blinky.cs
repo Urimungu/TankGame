@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class Blinky : MonoBehaviour {
     //Stats
-    private int _currentWayPoint;
+    private int _currentWayPoint = 0 ;
 
-    //References
-    public Transform Cannon;
-    public GameObject ShootLocation;
-    public Transform[] WayPoints;
-
+    private Transform _cannon;
+    private GameObject _shotLocation;
     private Rigidbody _rigidBody;
     private Transform _transform;
     private Transform _player;
@@ -26,11 +24,14 @@ public class Blinky : MonoBehaviour {
 
     private void Start() {
         GameManager.Manager.EnemyTanks.Add(gameObject);
-        _data = GameManager.Manager.Blinky;
+        _data = GetComponent<NPCTankData>();
         _state = State.Patrol;
         _transform = transform;
         _rigidBody = GetComponent<Rigidbody>();
         _movement = GetComponent<Movement>();
+        _cannon = transform.Find("Visuals").Find("CannonHolder");
+        _shotLocation = _cannon.Find("ShotSpawner").gameObject;
+        _data.ShotHolder = GameManager.Manager.ShotLocation.gameObject;
 
         //Prevents Crash if the game doesn't have a GameManager
         if(GameManager.Manager == null || GameManager.Manager.Player == null)
@@ -69,11 +70,11 @@ public class Blinky : MonoBehaviour {
     private void Combat() {
         Vector3 aimpos = GameManager.Manager.Player.transform.position;
         aimpos.y += (GameManager.Manager.Player.transform.position - _transform.position).magnitude * Mathf.Pow(0.2f, 2);
-        Cannon.LookAt(aimpos, Vector3.up);
+        _cannon.LookAt(aimpos, Vector3.up);
         //Shoot
         if(Time.time > _timerSecondary) {
             _timerSecondary = Time.time + _data.ReloadRate;
-            GetComponent<ShootManager>().Shoot(_data, ShootLocation, Cannon.gameObject, gameObject);
+            GetComponent<ShootManager>().Shoot(_data, _shotLocation, _cannon.gameObject, gameObject);
         }
 
         //Follows the player if he leaves the attacking range
@@ -87,12 +88,12 @@ public class Blinky : MonoBehaviour {
         //Run Away from the player
         Vector3 newDir = GameManager.Manager.Player.transform.position;
         Vector3 tempPos = _transform.position - (newDir * 10);
-        _movement.NPCMovement(_data, NewDirection(tempPos), tempPos, _rigidBody, ref _newTargetPosition, ref Cannon);
+        _movement.NPCMovement(_data, NewDirection(tempPos), tempPos, _rigidBody, ref _newTargetPosition, ref _cannon);
     }
 
     private void Chase() {
         //Moves towards the player
-        _movement.NPCMovement(_data, NewDirection(GameManager.Manager.Player.transform.position), GameManager.Manager.Player.transform.position, _rigidBody, ref _newTargetPosition, ref Cannon);
+        _movement.NPCMovement(_data, NewDirection(GameManager.Manager.Player.transform.position), GameManager.Manager.Player.transform.position, _rigidBody, ref _newTargetPosition, ref _cannon);
 
         //Gets to close and starts combat
         if(_data.FightRange > (GameManager.Manager.Player.transform.position - _transform.position).magnitude) {
@@ -156,11 +157,12 @@ public class Blinky : MonoBehaviour {
         }
 
         //Moves
-        _movement.NPCMovement(_data, NewDirection(WayPoints[_currentWayPoint].position), WayPoints[_currentWayPoint].position,_rigidBody, ref _newTargetPosition, ref Cannon);
+        _movement.NPCMovement(_data, NewDirection(GameManager.Manager.PickUpSpawnPoints[_currentWayPoint].transform.position), 
+            GameManager.Manager.PickUpSpawnPoints[_currentWayPoint].transform.position,_rigidBody, ref _newTargetPosition, ref _cannon);
 
         //Selects a new Way-point if they already reached the one they needed to get to
-        if (Mathf.Abs((transform.position - WayPoints[_currentWayPoint].position).magnitude) < 0.5f){
-            WayPoints[_currentWayPoint] = WayPoints[RandomSelector(WayPoints.Length - 1)];
+        if (Mathf.Abs((transform.position - GameManager.Manager.PickUpSpawnPoints[_currentWayPoint].transform.position).magnitude) < 0.5f){
+            GameManager.Manager.PickUpSpawnPoints[_currentWayPoint] = GameManager.Manager.PickUpSpawnPoints[RandomSelector(GameManager.Manager.PickUpSpawnPoints.Count - 1)];
             _newTargetPosition = Vector3.zero;
         }
     }
@@ -210,9 +212,9 @@ public class Blinky : MonoBehaviour {
         //Draws the path of the AI
         if(_newTargetPosition != Vector3.zero) {
             Debug.DrawLine(_transform.position, _newTargetPosition, Color.blue);
-            Debug.DrawLine(_newTargetPosition, WayPoints[_currentWayPoint].position, Color.blue);
+            Debug.DrawLine(_newTargetPosition, GameManager.Manager.PickUpSpawnPoints[_currentWayPoint].transform.position, Color.blue);
         } else {
-            Debug.DrawLine(_transform.position, WayPoints[_currentWayPoint].position, Color.blue);
+            Debug.DrawLine(_transform.position, GameManager.Manager.PickUpSpawnPoints[_currentWayPoint].transform.position, Color.blue);
         }
     }
 
@@ -238,7 +240,7 @@ public class Blinky : MonoBehaviour {
 
                 //If the path, seems impossible the Tank gives up and tries something else
                 if (checkRight == Vector3.zero && checkLeft == Vector3.zero) {
-                    _currentWayPoint = RandomSelector(WayPoints.Length - 1);
+                    _currentWayPoint = RandomSelector(GameManager.Manager.PickUpSpawnPoints.Count - 1);
                     _newTargetPosition = Vector3.zero;
                     return Vector3.zero;
                 }

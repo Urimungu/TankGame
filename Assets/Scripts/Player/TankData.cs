@@ -12,6 +12,10 @@ public class TankData : MonoBehaviour
     public float StopSpeed = 10;
     public bool TankCanMove = true;
 
+    //Health
+    public float CurrentHealth = 100;
+    public float MaxHealth = 100;
+
     //Bullet
     [Header("Shooting")]
     public GameObject shot;

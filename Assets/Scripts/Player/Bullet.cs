@@ -31,7 +31,8 @@ public class Bullet : MonoBehaviour
         //Damages enemy if there is one
         if(other.gameObject.GetComponent<Blinky>() != null && Shooter != other.gameObject)
             other.gameObject.GetComponent<Blinky>().GetHit(Damage, Shooter);
-
+        if(other.gameObject.GetComponent<PlayerController>() != null && Shooter != other.gameObject)
+            other.gameObject.GetComponent<PlayerController>().TakeDamage(Damage);
         //Regardless of what it hits, it destroys itself and explodes
         SpawnExplode();
         Destroy(gameObject);

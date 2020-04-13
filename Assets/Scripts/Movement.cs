@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour{
 
-    public void RegularMovement(float hor, float ver, TankData trans) {
+    public void RegularMovement(float hor, float ver, TankData trans, Transform cam) {
         //Removes the side speed boost
         Vector2 MoveDirection = new Vector2(hor, ver).normalized;
 
         //Moves the player forwards and right
-        trans._rigidbody.AddForce(GameManager.Manager.MainCamera.transform.forward * trans.TankAcc * MoveDirection.y, ForceMode.Acceleration);
-        trans._rigidbody.AddForce(GameManager.Manager.MainCamera.transform.right * trans.TankAcc * MoveDirection.x, ForceMode.Acceleration);
+        trans._rigidbody.AddForce(cam.forward * trans.TankAcc * MoveDirection.y, ForceMode.Acceleration);
+        trans._rigidbody.AddForce(cam.right * trans.TankAcc * MoveDirection.x, ForceMode.Acceleration);
 
         //Makes the speed different if the player is moving backwards
         float SpeedCap = ver > 0.1f ? trans.MaxSpeed : trans.ReverseMax;

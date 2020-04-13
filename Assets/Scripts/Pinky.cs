@@ -26,7 +26,7 @@ public class Pinky : MonoBehaviour {
 
     private void Start() {
         GameManager.Manager.EnemyTanks.Add(gameObject);
-        _data = GameManager.Manager.Blinky;
+        _data = GetComponent<NPCTankData>();
         _state = State.Patrol;
         _transform = transform;
         _rigidBody = GetComponent<Rigidbody>();

@@ -13,20 +13,20 @@ public class CameraController : MonoBehaviour
     private GameObject MainCam;
 
     private TankData TD;
-
     public Transform CannonHolder;
 
-
-    private void Start()
+    //Sets the values once it is spawned in
+    public void SpawnCamera(Transform target, TankData data)
     {
         //Finds the objects it needs
-        Target = GameManager.Manager.Player.transform;
-        TD = GameManager.Manager.transform.GetComponent<TankData>();
+        Target = target;
+        TD = data;
+
         Holder = transform.Find("CameraHolder").gameObject;
         CannonHolder = Target.GetChild(0).Find("CannonHolder");
+        MainCam = Holder.transform.GetChild(0).gameObject;
         SetUpCamera();
         TF = GetComponent<Transform>();
-        MainCam = GameManager.Manager.MainCamera;
     }
 
     private void SetUpCamera()
@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         //Gets basic input from the Editor
-        if (TD.CameraCanMove)
+        if (TD != null && TD.CameraCanMove)
         {
             float MouseX = Input.GetAxisRaw("Mouse X");
             float MouseY = Input.GetAxisRaw("Mouse Y");
