@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4048994126216622115}
   - component: {fileID: 3671990614063856593}
   - component: {fileID: 1585848797987250719}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FasterFire
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7391562105103992994}
   - component: {fileID: 4723763765604581719}
   - component: {fileID: 5025959152664914037}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: FasterBullets
   m_TagString: Untagged
   m_Icon: {fileID: 0}

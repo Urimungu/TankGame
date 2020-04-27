@@ -11,10 +11,16 @@ public class TankData : MonoBehaviour
     public float ReverseMax = 10;
     public float StopSpeed = 10;
     public bool TankCanMove = true;
+    public string TankNum = "_P1";
+    public string TankName = "Player";
 
     //Health
     public float CurrentHealth = 100;
     public float MaxHealth = 100;
+    public int Lives;
+
+    //Points
+    public int Points = 0;
 
     //Bullet
     [Header("Shooting")]
@@ -22,10 +28,10 @@ public class TankData : MonoBehaviour
     public GameObject ShotHolder;
     public Rigidbody _rigidbody;
 
+    //Bullet Stats
     public float bulletLifeTime = 4;
     public float bulletSpeed = 40;
     public float bulletDamage = 30;
-
     public float reloadRate;
 
     //Camera
@@ -39,4 +45,7 @@ public class TankData : MonoBehaviour
     public float theta = 0;
     public bool CameraCanMove = true;
     public LayerMask CameraLayerMask;
+
+    //Functions
+    public void AddPoints(int points) {Points += points;}
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2125046851592923173}
   - component: {fileID: 2125046851592923170}
   - component: {fileID: 7715937029232652290}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HealthUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,78 +1,74 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
     //References
-    private Transform TF;
-    private Transform Target;
-    private GameObject Holder;
-    private GameObject MainCam;
+    private Transform _transform;
+    private Transform _target;
+    private GameObject _holder;
+    private GameObject _mainCam;
 
-    private TankData TD;
+    private TankData _data;
     public Transform CannonHolder;
 
     //Sets the values once it is spawned in
     public void SpawnCamera(Transform target, TankData data)
     {
         //Finds the objects it needs
-        Target = target;
-        TD = data;
+        _target = target;
+        _data = data;
 
-        Holder = transform.Find("CameraHolder").gameObject;
-        CannonHolder = Target.GetChild(0).Find("CannonHolder");
-        MainCam = Holder.transform.GetChild(0).gameObject;
+        _holder = transform.Find("CameraHolder").gameObject;
+        CannonHolder = _target.GetChild(0).Find("CannonHolder");
+        _mainCam = _holder.transform.GetChild(0).gameObject;
         SetUpCamera();
-        TF = GetComponent<Transform>();
+        _transform = GetComponent<Transform>();
     }
 
-    private void SetUpCamera()
-    {
+    //Creates the camera values if they aren't already set up
+    private void SetUpCamera(){
         //Sets the position for the camera
-        Holder.transform.position = Target.transform.forward * -TD.CameraDistance;
-        Holder.transform.position = new Vector3(Holder.transform.position.x, TD.CameraHeight, Holder.transform.position.z);
+        _holder.transform.position = _target.transform.forward * -_data.CameraDistance;
+        _holder.transform.position = new Vector3(_holder.transform.position.x, _data.CameraHeight, _holder.transform.position.z);
 
     }
 
-    private void Update()
-    {
+    private void Update(){
         //Gets basic input from the Editor
-        if (TD != null && TD.CameraCanMove)
-        {
-            float MouseX = Input.GetAxisRaw("Mouse X");
-            float MouseY = Input.GetAxisRaw("Mouse Y");
+        if (_data != null && _data.CameraCanMove){
+            float MouseX = Input.GetAxisRaw("MouseX" + _data.TankNum);
+            float MouseY = Input.GetAxisRaw("MouseY" + _data.TankNum);
             Movement(MouseX, MouseY);
         }
-
     }
 
     private void Movement(float hor, float ver)
     {
         //Follows the player and adds a side distance
-        TF.position = Target.position + (Target.transform.right * TD.SideDistance);
+        _transform.position = _target.position + (_target.transform.right * _data.SideDistance);
 
         //Rotate around the tank in the X direction (Left/Right)
-        Target.Rotate(Target.transform.up * hor * TD.RotationSpeed);
-        TF.rotation = Target.rotation;
+        _target.Rotate(_target.transform.up * hor * _data.RotationSpeed);
+        _transform.rotation = _target.rotation;
 
         //Rotates the Camera in the Y direction (Up/Down)
         Vector3 newPos = new Vector3();
-        TD.theta = Mathf.Clamp(TD.theta + (TD.VerticalSpeed / 10) * -ver, -2.5f, -0.5f);
-        newPos.z = TD.CameraDistance * Mathf.Sin(TD.theta);
-        newPos.y = TD.CameraDistance * Mathf.Cos(TD.theta) + TD.CameraHeight;
+        _data.theta = Mathf.Clamp(_data.theta + (_data.VerticalSpeed / 10) * -ver, -2.5f, -0.5f);
+        newPos.z = _data.CameraDistance * Mathf.Sin(_data.theta);
+        newPos.y = _data.CameraDistance * Mathf.Cos(_data.theta) + _data.CameraHeight;
 
         //Applies the new transforms and makes sure they work
-        Holder.transform.localPosition = newPos;
-        MainCam.transform.localPosition = Vector3.zero;
-        MainCam.transform.LookAt(new Vector3(TF.position.x, TF.position.y + TD.CameraHeight / 2, TF.position.z) - (TF.right * TD.SideDistance / 3), Vector3.up);
+        _holder.transform.localPosition = newPos;
+        _mainCam.transform.localPosition = Vector3.zero;
+        _mainCam.transform.LookAt(new Vector3(_transform.position.x, _transform.position.y + _data.CameraHeight / 2, _transform.position.z) - (_transform.right * _data.SideDistance / 3), Vector3.up);
 
         //Aesthetics 
-        CannonHolder.transform.LookAt(MainCam.transform.position + (MainCam.transform.forward * 100), Vector3.up);
+        CannonHolder.transform.LookAt(_mainCam.transform.position + (_mainCam.transform.forward * 100), Vector3.up);
         RaycastHit hit;
-        if (Physics.Raycast(MainCam.transform.position, MainCam.transform.forward, out hit, 100, TD.CameraLayerMask)) {
+        if (Physics.Raycast(_mainCam.transform.position, _mainCam.transform.forward, out hit, 100, _data.CameraLayerMask)) {
             if(hit.collider != null) {
                 CannonHolder.transform.LookAt(hit.point, Vector3.up);
             }
