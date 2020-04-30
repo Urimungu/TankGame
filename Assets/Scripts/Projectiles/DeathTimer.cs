@@ -8,7 +8,11 @@ public class DeathTimer : MonoBehaviour
 
     //Starts the counter
     private void Start() {
-        GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
+        //Sets the volume
+        if(GameManager.Manager.Mute)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
         StartCoroutine(death());
     }
 

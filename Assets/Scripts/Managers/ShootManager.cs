@@ -8,7 +8,11 @@ public class ShootManager : MonoBehaviour
     //Fires a bullet
     public void Shoot(TankData TS, GameObject Cannon, GameObject CannonHolder, GameObject shooter){
         GameObject bullet = Instantiate(TS.shot, Cannon.transform.position, CannonHolder.transform.rotation, TS.ShotHolder.transform);
-        GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
+        //Controls the volume
+        if(GameManager.Manager.Mute)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
         GetComponent<AudioSource>().Play();
 
         //Changes the bullet states and plays the animations
@@ -20,7 +24,11 @@ public class ShootManager : MonoBehaviour
     //Shoots for the Enemy Tank
     public void Shoot(NPCTankData TS, GameObject Cannon, GameObject CannonHolder, GameObject shooter) {
         GameObject bullet = Instantiate(TS.Shot, Cannon.transform.position, CannonHolder.transform.rotation, TS.ShotHolder.transform);
-        GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
+        //Controls the volume
+        if(GameManager.Manager.Mute)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
         GetComponent<AudioSource>().Play();
 
         //Changes the bullet states and plays the animations

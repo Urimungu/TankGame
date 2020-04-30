@@ -109,7 +109,10 @@ public class GameManager : MonoBehaviour
 
         //Gets the timer
         if(_inGame) MatchManager();
-        GetComponent<AudioSource>().volume = MusicVolume;
+        if(Mute)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = MusicVolume;
     }
 
     //Runs the Match
@@ -169,7 +172,6 @@ public class GameManager : MonoBehaviour
 
     //Removes all linked references to start fresh
     private void RemoveReferences() {
-        foreach(GameObject tank in EnemyTanks) Destroy(tank);
         foreach(Transform child in transform) Destroy(child.gameObject);
         EnemyTanks.Clear();
         Player = null;

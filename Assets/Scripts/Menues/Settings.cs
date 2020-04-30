@@ -29,8 +29,8 @@ public class Settings : MonoBehaviour
         _dailyRoom.isOn = levelManager.RoomOfTheDay;
 
         //Volume
-        _effectVolume.value = GameManager.Manager.EffectsVolume / 100;
-        _musicVolume.value = GameManager.Manager.MusicVolume / 100;
+        _effectVolume.value = GameManager.Manager.EffectsVolume;
+        _musicVolume.value = GameManager.Manager.MusicVolume;
         _muteSound.isOn = GameManager.Manager.Mute;
     }
 
@@ -43,9 +43,14 @@ public class Settings : MonoBehaviour
         levelManager.RoomOfTheDay = _dailyRoom.isOn;
 
         //Sound
-        GameManager.Manager.EffectsVolume = _effectVolume.value * 100;
-        GameManager.Manager.MusicVolume = _musicVolume.value * 100;
+        GameManager.Manager.EffectsVolume = _effectVolume.value;
+        GameManager.Manager.MusicVolume = _musicVolume.value;
         GameManager.Manager.Mute = _muteSound.isOn;
+    }
+
+    //Updates music Automatically
+    public void MusicIsChanging() {
+        GameManager.Manager.MusicVolume = _musicVolume.value;
     }
 
     //If activated deactives the seed number
@@ -68,5 +73,6 @@ public class Settings : MonoBehaviour
     public void OnMute() {
         _effectVolume.interactable = !_muteSound.isOn;
         _musicVolume.interactable = !_muteSound.isOn;
+        GameManager.Manager.Mute = _muteSound.isOn;
     }
 }

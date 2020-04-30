@@ -61,12 +61,6 @@ public class PlayerController : MonoBehaviour{
         }
     }
 
-    //Plays the shooting sound effects
-    private void PlayShot() {
-        GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
-        GetComponent<AudioSource>().Play();
-    }
-
     //Two Player mode
     public void TwoPlayer() {
         StartTank();

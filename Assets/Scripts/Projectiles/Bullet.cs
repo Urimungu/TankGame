@@ -12,8 +12,13 @@ public class Bullet : MonoBehaviour
     private float Damage = 30;
 
     public void Enter(float life, float speed, float damage, GameObject shooter){
+        //Sets the sound
+        if(GameManager.Manager.Mute)
+            GetComponent<AudioSource>().volume = 0;
+        else
+            GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
+
         //Moves the bullet forward
-        GetComponent<AudioSource>().volume = GameManager.Manager.EffectsVolume;
         GetComponent<Rigidbody>().AddForce(transform.forward * speed, ForceMode.Impulse);
 
         //Sets the values
